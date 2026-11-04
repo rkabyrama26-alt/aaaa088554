@@ -788,6 +788,18 @@
     backdrop-filter: blur(4px);
   }
 
+  /* الهيكل العظمي (Skeleton) */
+  @keyframes pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+  }
+  .vod-skeleton {
+    background: linear-gradient(145deg, #1a1030 0%, #0f0a1e 100%);
+    animation: pulse 1.5s infinite;
+    border: 1px solid rgba(201, 160, 255, 0.1);
+  }
+
   /* مشغل VOD */
   .vod-player-modal {
     position: fixed;
@@ -1044,7 +1056,6 @@
   let vodLoaded = false;
   let vodHls = null;
 
-  // متغيرات قسم VOD (التمرير اللانهائي)
   let vodData = [];
   let vodRenderedCount = 0;
   const VOD_BATCH_SIZE = 15;
@@ -1083,18 +1094,6 @@
     } catch (e) {
       return text;
     }
-  }
-
-  async function fetchWithTimeout(resource, options = {}) {
-    const { timeout = 15000 } = options;
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeout);
-    const response = await fetch(resource, {
-      ...options,
-      signal: controller.signal  
-    });
-    clearTimeout(id);
-    return response;
   }
 
   function goTo(section) {
@@ -1405,7 +1404,7 @@
   }
 
   /* ==========================================================
-     VOD (MOVIES & SERIES) LOGIC - INFINITE SCROLL
+     VOD (MOVIES & SERIES) LOGIC - ULTRA FAST LOAD
      ========================================================== */
   function openVOD() {
     document.getElementById('vodView').classList.add('active');
@@ -1418,54 +1417,80 @@
 
   async function loadVOD() {
     const body = document.getElementById('vodBody');
-    body.innerHTML = '<div class="news-loading">⏳ جاري تحميل الأفلام والمسلسلات...</div>';
+    
+    // 1. عرض واجهة "الهيكل العظمي" فوراً لتجنب الشعور بالبطء
+    body.innerHTML = `
+      <div class="vod-grid" id="vodGrid">
+        ${Array(12).fill(0).map(() => `
+          <div class="vod-item vod-skeleton">
+            <div class="vod-title" style="color:#7e6ca8;">⏳</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="vod-sentinel" id="vodSentinel" style="display:block;">⏳ جاري جلب البيانات من السيرفر...</div>
+    `;
 
     try {
       const base = `${VOD_CONFIG.host}/player_api.php?username=${encodeURIComponent(VOD_CONFIG.username)}&password=${encodeURIComponent(VOD_CONFIG.password)}`;
       
-      const moviesPromise = fetchWithTimeout(`${base}&action=get_vod_streams`, { timeout: 20000 }).then(r => r.json()).catch(() => []);
-      const seriesPromise = fetchWithTimeout(`${base}&action=get_series`, { timeout: 20000 }).then(r => r.json()).catch(() => []);
+      // إزالة limit لضمان عمل السيرفر، واستخدام Promise.allSettled لضمان جلب أحدهما حتى لو فشل الآخر
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 ثانية كحد أقصى
 
-      const [movies, series] = await Promise.all([moviesPromise, seriesPromise]);
+      const [moviesRes, seriesRes] = await Promise.allSettled([
+        fetch(`${base}&action=get_vod_streams`, { signal: controller.signal }).then(r => r.json()),
+        fetch(`${base}&action=get_series`, { signal: controller.signal }).then(r => r.json())
+      ]);
+      
+      clearTimeout(timeoutId);
+
+      let movies = [];
+      if (moviesRes.status === 'fulfilled' && moviesRes.value) {
+          if (Array.isArray(moviesRes.value)) movies = moviesRes.value;
+          else if (Array.isArray(moviesRes.value.vod_streams)) movies = moviesRes.value.vod_streams;
+      }
+
+      let series = [];
+      if (seriesRes.status === 'fulfilled' && seriesRes.value) {
+          if (Array.isArray(seriesRes.value)) series = seriesRes.value;
+          else if (Array.isArray(seriesRes.value.series)) series = seriesRes.value.series;
+      }
 
       let allVOD = [];
       
-      if (Array.isArray(movies)) {
-        movies.forEach(m => {
-          allVOD.push({ ...m, type: 'movie', stream_id: m.stream_id, container_extension: m.container_extension || 'mp4' });
-        });
-      }
+      movies.forEach(m => {
+        allVOD.push({ ...m, type: 'movie', stream_id: m.stream_id, container_extension: m.container_extension || 'mp4' });
+      });
       
-      if (Array.isArray(series)) {
-        series.forEach(s => {
-          allVOD.push({ ...s, type: 'series', stream_icon: s.cover || s.stream_icon || '', stream_id: s.series_id });
-        });
-      }
+      series.forEach(s => {
+        allVOD.push({ ...s, type: 'series', stream_icon: s.cover || s.stream_icon || '', stream_id: s.series_id });
+      });
 
-      // قص القائمة إلى 700 عنصر كحد أقصى
       vodData = allVOD.slice(0, VOD_CONFIG.maxItems);
       vodRenderedCount = 0;
 
       if (!vodData.length) {
-        body.innerHTML = '<div class="news-loading">لا توجد أفلام أو مسلسلات متاحة</div>';
+        body.innerHTML = '<div class="news-loading">لا توجد أفلام أو مسلسلات متاحة (تأكد من الرابط والبيانات أو أن السيرفر لا يسمح بالاتصال من المتصفح CORS)</div>';
         vodLoaded = true;
         return;
       }
 
-      // تجهيز واجهة المستخدم
-      body.innerHTML = `
-        <div class="vod-grid" id="vodGrid"></div>
-        <div class="vod-sentinel" id="vodSentinel">جاري تحميل المزيد...</div>
-      `;
-
-      // عرض أول 10 عناصر فوراً
+      // إزالة الهيكل العظمي وعرض البيانات الحقيقية
+      document.getElementById('vodGrid').innerHTML = '';
       renderVODBatch(true);
       setupVODObserver();
       vodLoaded = true;
 
     } catch (err) {
       console.error(err);
-      body.innerHTML = `<div class="news-error">تعذّر تحميل الأفلام والمسلسلات<br><small style="opacity:.7">${escapeHtml(err.message)}</small></div>`;
+      // في حال حدوث خطأ أو انتهاء وقت الانتظار
+      body.innerHTML = `
+        <div class="news-error">
+          ⚠️ تعذّر تحميل الأفلام والمسلسلات بسرعة.<br>
+          <small style="opacity:.7">قد يكون السيرفر بطيئاً جداً أو يوجد حظر اتصال (Mixed Content / CORS).</small><br><br>
+          <button onclick="loadVOD()" style="background:#4b1c82; color:#fff; border:1px solid #c9a0ff; padding:8px 20px; border-radius:8px; font-family:Tajawal; font-weight:bold; font-size:14px; cursor:pointer;">🔄 إعادة المحاولة</button>
+        </div>
+      `;
     }
   }
 
@@ -1474,7 +1499,6 @@
     const sentinel = document.getElementById('vodSentinel');
     if (!grid) return;
 
-    // إذا كانت هذه المرة الأولى، نعرض 10 عناصر فقط، وإلا نعرض 15
     const limit = isFirst ? 10 : VOD_BATCH_SIZE;
     const chunk = vodData.slice(vodRenderedCount, vodRenderedCount + limit);
     
@@ -1503,8 +1527,13 @@
     grid.insertAdjacentHTML('beforeend', html);
     vodRenderedCount += chunk.length;
 
-    if (vodRenderedCount >= vodData.length && sentinel) {
-      sentinel.style.display = 'none';
+    if (sentinel) {
+      if (vodRenderedCount >= vodData.length) {
+        sentinel.style.display = 'none';
+      } else {
+        sentinel.style.display = 'block';
+        sentinel.textContent = '⬇️ انزل للأسفل لتحميل المزيد...';
+      }
     }
   }
 
@@ -1515,10 +1544,10 @@
     
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
-        observer.disconnect(); // إيقاف المراقبة مؤقتاً لمنع التكرار
+        observer.disconnect();
         renderVODBatch(false);
         if (vodRenderedCount < vodData.length) {
-          setTimeout(() => observer.observe(sentinel), 100); // إعادة المراقبة بعد التحميل
+          setTimeout(() => observer.observe(sentinel), 100);
         }
       }
     }, { root: body, rootMargin: '200px' });
@@ -1548,7 +1577,7 @@
     } else if (type === 'series') {
       titleEl.textContent = title + ' (جاري جلب الحلقات...)';
       try {
-        const infoRes = await fetchWithTimeout(`${base}&action=get_series_info&series_id=${id}`, { timeout: 15000 });
+        const infoRes = await fetch(`${base}&action=get_series_info&series_id=${id}`);
         const info = await infoRes.json();
         
         if (info && info.episodes) {
