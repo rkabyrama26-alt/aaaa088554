@@ -14,9 +14,6 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* ==========================================
-     دعم المساحات الآمنة (Safe Area) للشاشات
-     ========================================== */
   :root {
     --sat: env(safe-area-inset-top, 0px);
     --sab: env(safe-area-inset-bottom, 0px);
@@ -26,6 +23,8 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+    border: none;
+    outline: none;
   }
 
   body {
@@ -55,14 +54,13 @@
     background: radial-gradient(ellipse at 50% 40%, rgba(100, 50, 180, 0.15) 0%, transparent 60%);
   }
 
-  /* القائمة الرئيسية مع دعم الآيفون/الأندرويد */
   .container {
     position: relative;
     z-index: 1;
     width: 100%;
     max-width: 420px;
     height: 100vh;
-    height: 100dvh; /* الوضع الصحيح للشاشات الحديثة */
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -83,7 +81,6 @@
     width: 100%;
     aspect-ratio: 1 / 1;
     background: linear-gradient(145deg, rgba(75, 28, 130, 0.95), rgba(38, 14, 70, 0.98));
-    border: 1.5px solid #c9a0ff;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -94,9 +91,10 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 
       0 5px 15px rgba(0, 0, 0, 0.5),
-      0 0 12px rgba(180, 140, 255, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      0 0 12px rgba(180, 140, 255, 0.15);
     backdrop-filter: blur(12px);
+    border: none;
+    outline: none;
   }
 
   .card:active {
@@ -106,8 +104,7 @@
   .card:hover {
     box-shadow: 
       0 8px 20px rgba(0, 0, 0, 0.6),
-      0 0 20px rgba(180, 140, 255, 0.35),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      0 0 20px rgba(180, 140, 255, 0.35);
   }
 
   .card.center {
@@ -174,7 +171,6 @@
     width: 100%;
     aspect-ratio: 16 / 9;
     background: #000;
-    border-bottom: 1px solid rgba(201, 160, 255, 0.15);
     flex-shrink: 0;
   }
 
@@ -192,13 +188,13 @@
     z-index: 20;
     background: transparent;
     border: none;
+    outline: none;
     color: #fff;
     cursor: pointer;
     padding: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    outline: none;
     filter: drop-shadow(0px 2px 6px rgba(0, 0, 0, 0.9));
   }
   
@@ -232,7 +228,6 @@
     width: 110px;
     overflow-y: auto;
     background: #120a24;
-    border-left: 1px solid rgba(201, 160, 255, 0.1);
     padding: 0;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -250,10 +245,10 @@
     color: #b39ddb;
     cursor: pointer;
     text-align: center;
-    border-bottom: 1px solid rgba(255,255,255,0.03);
     transition: all 0.2s;
     word-break: break-word;
     line-height: 1.3;
+    border: none;
   }
 
   .cat-item:hover {
@@ -263,7 +258,6 @@
   .cat-item.active {
     background: #4b1c82;
     color: #fff;
-    border-right: 3px solid #c9a0ff;
   }
 
   .ch-list {
@@ -281,8 +275,8 @@
     padding: 10px 12px;
     cursor: pointer;
     background: transparent;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     transition: background 0.2s;
+    border: none;
   }
 
   .ch-item:hover,
@@ -405,7 +399,6 @@
   .match-card {
     position: relative;
     background: linear-gradient(145deg, #1a1030 0%, #0f0a1e 100%);
-    border: 1px solid rgba(201, 160, 255, 0.18);
     border-radius: 18px;
     padding: 12px 14px;
     margin-bottom: 12px;
@@ -414,6 +407,7 @@
     transition: transform 0.2s, box-shadow 0.2s;
     display: flex;
     flex-direction: column;
+    border: none;
   }
 
   .match-card:active {
@@ -434,25 +428,23 @@
     border-radius: 20px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+    border: none;
   }
 
   .match-status-badge.live {
     background: rgba(255, 60, 60, 0.2);
     color: #ff6b6b;
-    border: 1px solid rgba(255, 60, 60, 0.4);
     animation: pulse-live 1.5s infinite;
   }
 
   .match-status-badge.final {
     background: rgba(160, 160, 160, 0.15);
     color: #aaa;
-    border: 1px solid rgba(160, 160, 160, 0.25);
   }
 
   .match-status-badge.scheduled {
     background: rgba(100, 200, 255, 0.15);
     color: #6bc5ff;
-    border: 1px solid rgba(100, 200, 255, 0.3);
   }
 
   @keyframes pulse-live {
@@ -625,7 +617,6 @@
   .news-card {
     position: relative;
     background: linear-gradient(145deg, #1a1030 0%, #0f0a1e 100%);
-    border: 1px solid rgba(201, 160, 255, 0.18);
     border-radius: 18px;
     margin-bottom: 14px;
     overflow: hidden;
@@ -633,6 +624,7 @@
     transition: transform 0.2s, box-shadow 0.2s;
     display: flex;
     flex-direction: column;
+    border: none;
   }
 
   .news-card:active {
@@ -716,21 +708,26 @@
   .vod-view.active { display: flex; }
 
   .vod-header {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 10px 12px;
     background: #0a0618;
-    border-bottom: 1px solid rgba(201, 160, 255, 0.12);
     flex-shrink: 0;
-    gap: 8px;
   }
 
   .vod-header .back-btn {
-    position: static;
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
     color: #d8c4ff;
     filter: none;
     padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .vod-header .back-btn svg {
@@ -741,7 +738,6 @@
   .vod-tabs {
     display: flex;
     gap: 6px;
-    flex: 1;
     justify-content: center;
   }
 
@@ -749,20 +745,22 @@
     padding: 6px 14px;
     border-radius: 20px;
     background: rgba(75, 28, 130, 0.35);
-    border: 1px solid rgba(201, 160, 255, 0.2);
     color: #b39ddb;
     font-family: inherit;
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
+    border: none;
+    outline: none;
   }
 
   .vod-tab.active {
     background: linear-gradient(145deg, #6c2eb8, #4b1c82);
     color: #fff;
-    border-color: #c9a0ff;
     box-shadow: 0 0 10px rgba(201, 160, 255, 0.4);
+    border: none;
+    outline: none;
   }
 
   .vod-body {
@@ -788,16 +786,15 @@
     border-radius: 12px;
     overflow: hidden;
     background: linear-gradient(145deg, #1a1030, #0f0a1e);
-    border: 1px solid rgba(201, 160, 255, 0.15);
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+    border: none;
   }
 
   .vod-card:active { transform: scale(0.95); }
 
   .vod-card:hover {
-    border-color: #c9a0ff;
     box-shadow: 0 0 14px rgba(201, 160, 255, 0.4);
   }
 
@@ -830,6 +827,7 @@
     border-radius: 10px;
     backdrop-filter: blur(6px);
     letter-spacing: 0.3px;
+    border: none;
   }
 
   .vod-card .vod-badge.movie {
@@ -891,7 +889,6 @@
     margin-top: 14px;
     padding: 9px 20px;
     border-radius: 12px;
-    border: 1px solid #c9a0ff;
     background: linear-gradient(145deg, #6c2eb8, #4b1c82);
     color: #fff;
     font-family: inherit;
@@ -899,6 +896,8 @@
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+    border: none;
+    outline: none;
   }
   .vod-retry-btn:active { transform: scale(0.95); }
 
@@ -924,7 +923,6 @@
     gap: 10px;
     padding: 12px 14px;
     background: #0a0618;
-    border-bottom: 1px solid rgba(201, 160, 255, 0.12);
     flex-shrink: 0;
   }
 
@@ -967,7 +965,6 @@
     color: #c9a0ff;
     margin: 14px 4px 8px;
     padding-bottom: 6px;
-    border-bottom: 1px solid rgba(201, 160, 255, 0.2);
   }
 
   .episode-item {
@@ -977,16 +974,15 @@
     padding: 12px 12px;
     margin-bottom: 6px;
     background: linear-gradient(145deg, #1a1030, #0f0a1e);
-    border: 1px solid rgba(201, 160, 255, 0.12);
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s;
+    border: none;
   }
 
   .episode-item:active { transform: scale(0.98); }
 
   .episode-item:hover {
-    border-color: rgba(201, 160, 255, 0.4);
     background: linear-gradient(145deg, #2a1a4a, #150e26);
   }
 
@@ -1054,7 +1050,6 @@
   .vod-player-info {
     padding: 14px 16px;
     background: #0a0618;
-    border-top: 1px solid rgba(201, 160, 255, 0.12);
     flex-shrink: 0;
   }
 
@@ -1090,6 +1085,179 @@
   @media (min-width: 500px) {
     .vod-grid { grid-template-columns: repeat(4, 1fr); }
   }
+
+  /* ============================================
+     SETTINGS VIEW
+     ============================================ */
+  .settings-view {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: #0a0618;
+    display: none;
+    flex-direction: column;
+    padding-top: var(--sat);
+    padding-bottom: var(--sab);
+  }
+
+  .settings-view.active { display: flex; }
+
+  .settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    background: #0a0618;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .settings-header .back-btn {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #d8c4ff;
+    filter: none;
+    padding: 4px;
+  }
+
+  .settings-header .back-btn svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .settings-title {
+    font-size: 16px;
+    font-weight: 900;
+    color: #fff;
+  }
+
+  .settings-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .settings-body::-webkit-scrollbar { display: none; }
+
+  /* تصميم أقسام الإعدادات الفخم */
+  .settings-section {
+    background: linear-gradient(145deg, rgba(42, 26, 74, 0.4), rgba(15, 10, 30, 0.8));
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    border: none;
+  }
+
+  .settings-section-title {
+    font-size: 15px;
+    font-weight: 900;
+    color: #d8c4ff;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .settings-section-title .section-icon {
+    width: 22px;
+    height: 22px;
+    fill: #c9a0ff;
+  }
+
+  /* Language Toggle */
+  .lang-toggle {
+    display: flex;
+    gap: 12px;
+  }
+
+  .lang-btn {
+    flex: 1;
+    padding: 16px;
+    border-radius: 16px;
+    background: rgba(75, 28, 130, 0.2);
+    color: #a08bc4;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none !important;
+    outline: none !important;
+  }
+
+  .lang-btn.active {
+    background: linear-gradient(145deg, #7b38d6, #4b1c82);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(123, 56, 214, 0.4);
+    border: none !important;
+    outline: none !important;
+  }
+
+  .lang-btn:active { transform: scale(0.95); }
+
+  /* Social Links */
+  .social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .social-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+  }
+
+  .social-item:hover {
+    background: rgba(255, 255, 255, 0.07);
+    transform: translateY(-2px);
+  }
+
+  .social-item:active { transform: scale(0.98); }
+
+  .social-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  .social-icon.telegram { background: rgba(41, 161, 217, 0.15); color: #29a1d9; }
+  .social-icon.youtube { background: rgba(255, 0, 0, 0.15); color: #ff0000; }
+  .social-icon.email { background: rgba(234, 67, 53, 0.15); color: #ea4335; }
+
+  .social-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+  }
+
+  .social-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+    flex: 1;
+  }
 </style>
 </head>
 <body>
@@ -1109,7 +1277,7 @@
             <path d="M32 48v6" stroke="#42A5F5" stroke-width="3" stroke-linecap="round"/>
           </svg>
         </div>
-        <div class="label">قنوات</div>
+        <div class="label" data-i18n="channels">قنوات</div>
       </div>
 
       <!-- جدول -->
@@ -1126,7 +1294,7 @@
             <circle cx="32" cy="46" r="3" fill="#4DD0E1"/>
           </svg>
         </div>
-        <div class="label">جدول</div>
+        <div class="label" data-i18n="schedule">جدول</div>
       </div>
 
       <!-- أخبار -->
@@ -1141,7 +1309,7 @@
             <rect x="38" y="18" width="10" height="10" rx="2" fill="#FFB74D"/>
           </svg>
         </div>
-        <div class="label">أخبار</div>
+        <div class="label" data-i18n="news">أخبار</div>
       </div>
 
       <!-- مسلسلات -->
@@ -1156,7 +1324,7 @@
             <path d="M28 34l10 5-10 5V34z" fill="#fff"/>
           </svg>
         </div>
-        <div class="label">مسلسلات</div>
+        <div class="label" data-i18n="series">مسلسلات</div>
       </div>
 
       <!-- إعدادات -->
@@ -1166,7 +1334,7 @@
             <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
           </svg>
         </div>
-        <div class="label">إعدادات</div>
+        <div class="label" data-i18n="settings">إعدادات</div>
       </div>
 
     </div>
@@ -1182,15 +1350,15 @@
         </svg>
       </button>
       <video id="player" controls playsinline preload="none"></video>
-      <div id="playerStatus">اختر قناة من القائمة للتشغيل</div>
+      <div id="playerStatus" data-i18n="choose_channel">اختر قناة من القائمة للتشغيل</div>
     </div>
 
     <div class="channels-body">
       <div class="ch-list" id="chList">
-        <div class="list-loading">جارِ تحميل القنوات...</div>
+        <div class="list-loading" data-i18n="loading">جارِ تحميل القنوات...</div>
       </div>
       <div class="cat-list" id="catList">
-        <div class="list-loading">تحميل...</div>
+        <div class="list-loading" data-i18n="loading">تحميل...</div>
       </div>
     </div>
   </div>
@@ -1207,7 +1375,7 @@
     </div>
 
     <div class="schedule-body" id="scheduleBody">
-      <div class="schedule-loading">⏳ جاري تحميل المباريات...</div>
+      <div class="schedule-loading" data-i18n="loading_matches">⏳ جاري تحميل المباريات...</div>
     </div>
   </div>
 
@@ -1223,7 +1391,7 @@
     </div>
 
     <div class="news-body" id="newsBody">
-      <div class="news-loading">⏳ جاري تحميل وترجمة الأخبار...</div>
+      <div class="news-loading" data-i18n="loading_news">⏳ جاري تحميل وترجمة الأخبار...</div>
     </div>
   </div>
 
@@ -1239,14 +1407,14 @@
         </svg>
       </button>
       <div class="vod-tabs">
-        <button class="vod-tab active" data-filter="all" onclick="setVodFilter('all')">الكل</button>
-        <button class="vod-tab" data-filter="movie" onclick="setVodFilter('movie')">أفلام</button>
-        <button class="vod-tab" data-filter="series" onclick="setVodFilter('series')">مسلسلات</button>
+        <button class="vod-tab active" data-filter="all" onclick="setVodFilter('all')" data-i18n="all">الكل</button>
+        <button class="vod-tab" data-filter="movie" onclick="setVodFilter('movie')" data-i18n="movies">أفلام</button>
+        <button class="vod-tab" data-filter="series" onclick="setVodFilter('series')" data-i18n="series">مسلسلات</button>
       </div>
     </div>
     <div class="vod-body">
       <div class="vod-grid" id="vodGrid">
-        <div class="vod-loading">⏳ جاري تحميل الأفلام والمسلسلات...</div>
+        <div class="vod-loading" data-i18n="loading_vod">⏳ جاري تحميل الأفلام والمسلسلات...</div>
       </div>
     </div>
   </div>
@@ -1260,7 +1428,7 @@
           <polyline points="12 19 5 12 12 5"></polyline>
         </svg>
       </button>
-      <div class="episodes-title" id="episodesTitle">المسلسل</div>
+      <div class="episodes-title" id="episodesTitle" data-i18n="series">المسلسل</div>
     </div>
     <div class="episodes-body" id="episodesBody">
       <div class="vod-loading">⏳</div>
@@ -1277,7 +1445,7 @@
         </svg>
       </button>
       <video id="vodPlayer" controls playsinline preload="none"></video>
-      <div id="vodPlayerStatus">جار التحميل...</div>
+      <div id="vodPlayerStatus" data-i18n="loading_video">جار التحميل...</div>
     </div>
     <div class="vod-player-info">
       <div class="vod-player-title" id="vodPlayerTitle">—</div>
@@ -1285,10 +1453,193 @@
     </div>
   </div>
 
+  <!-- ============================================
+       SETTINGS VIEW
+       ============================================ -->
+  <div class="settings-view" id="settingsView">
+    <div class="settings-header">
+      <button class="back-btn" onclick="closeSettings()" aria-label="رجوع">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+      <div class="settings-title" data-i18n="settings">إعدادات</div>
+    </div>
+    <div class="settings-body">
+      <!-- Language Section -->
+      <div class="settings-section">
+        <div class="settings-section-title">
+          <!-- أيقونة كرة أرضية -->
+          <svg class="section-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+          <span data-i18n="language">اللغة</span>
+        </div>
+        <div class="lang-toggle">
+          <button class="lang-btn active" id="btnLangAr" onclick="setLanguage('ar')">
+            <span>العربية</span>
+          </button>
+          <button class="lang-btn" id="btnLangEn" onclick="setLanguage('en')">
+            <span>English</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Contact Section -->
+      <div class="settings-section">
+        <div class="settings-section-title">
+          <svg class="section-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+          </svg>
+          <span data-i18n="contact">تواصل معنا</span>
+        </div>
+        <div class="social-links">
+          <!-- تلغرام -->
+          <a href="https://t.me/azcajfaj" target="_blank" class="social-item">
+            <div class="social-icon telegram">
+              <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            </div>
+            <span class="social-name" data-i18n="telegram">تليجرام</span>
+          </a>
+          
+          <!-- يوتيوب -->
+          <a href="https://youtube.com/@screen.star123?si=0VzNlElGEvNDe2mY" target="_blank" class="social-item">
+            <div class="social-icon youtube">
+              <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </div>
+            <span class="social-name" data-i18n="youtube">يوتيوب</span>
+          </a>
+
+          <!-- البريد -->
+          <a href="mailto:zjffjxvh8885@gmail.com" class="social-item">
+            <div class="social-icon email">
+              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </div>
+            <span class="social-name" data-i18n="email">البريد الإلكتروني</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- HLS.js -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
 
 <script>
+  /* ==========================================================
+     نظام الترجمة (i18n)
+     ========================================================== */
+  const translations = {
+    ar: {
+      channels: "قنوات",
+      schedule: "جدول",
+      news: "أخبار",
+      series: "مسلسلات",
+      settings: "إعدادات",
+      all: "الكل",
+      movies: "أفلام",
+      loading: "جارِ التحميل...",
+      loading_channels: "جارِ تحميل القنوات...",
+      loading_matches: "⏳ جاري تحميل المباريات...",
+      loading_news: "⏳ جاري تحميل وترجمة الأخبار...",
+      loading_vod: "⏳ جاري تحميل الأفلام والمسلسلات...",
+      loading_episodes: "⏳ جاري تحميل الحلقات...",
+      loading_video: "⏳ جاري التحميل...",
+      choose_channel: "اختر قناة من القائمة للتشغيل",
+      no_content: "لا يوجد محتوى في هذا التصنيف",
+      retry: "🔄 إعادة المحاولة",
+      error_load: "تعذّر التحميل",
+      error_retry: "تحقق من الاتصال بالإنترنت",
+      season: "الموسم",
+      episode: "حلقة",
+      movie_badge: "فيلم",
+      series_badge: "مسلسل",
+      connecting: "⏳ جاري الاتصال بالقناة...",
+      play_error: "❌ تعذّر التشغيل",
+      language: "اللغة",
+      contact: "تواصل معنا",
+      telegram: "تليجرام",
+      youtube: "يوتيوب",
+      email: "البريد الإلكتروني",
+      yes: "نعم",
+      no: "لا",
+      matches: "مباريات",
+    },
+    en: {
+      channels: "Channels",
+      schedule: "Schedule",
+      news: "News",
+      series: "Movies & Series",
+      settings: "Settings",
+      all: "All",
+      movies: "Movies",
+      loading: "Loading...",
+      loading_channels: "Loading channels...",
+      loading_matches: "⏳ Loading matches...",
+      loading_news: "⏳ Loading news...",
+      loading_vod: "⏳ Loading movies & series...",
+      loading_episodes: "⏳ Loading episodes...",
+      loading_video: "⏳ Loading video...",
+      choose_channel: "Choose a channel to play",
+      no_content: "No content in this category",
+      retry: "🔄 Retry",
+      error_load: "Failed to load",
+      error_retry: "Check your internet connection",
+      season: "Season",
+      episode: "Episode",
+      movie_badge: "Movie",
+      series_badge: "Series",
+      connecting: "⏳ Connecting...",
+      play_error: "❌ Playback failed",
+      language: "Language",
+      contact: "Contact Us",
+      telegram: "Telegram",
+      youtube: "YouTube",
+      email: "Email",
+      yes: "Yes",
+      no: "No",
+      matches: "Matches",
+    }
+  };
+
+  let currentLang = localStorage.getItem('app_lang') || 'ar';
+
+  function t(key) {
+    return translations[currentLang][key] || key;
+  }
+
+  function applyTranslations() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (translations[currentLang][key]) {
+        el.textContent = translations[currentLang][key];
+      }
+    });
+
+    const btnAr = document.getElementById('btnLangAr');
+    const btnEn = document.getElementById('btnLangEn');
+    if (btnAr && btnEn) {
+      btnAr.classList.toggle('active', currentLang === 'ar');
+      btnEn.classList.toggle('active', currentLang === 'en');
+    }
+
+    document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = currentLang;
+
+    if (vodItems.length > 0) renderVodGrid();
+    if (allChannels.length > 0) renderChannels();
+  }
+
+  function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('app_lang', lang);
+    applyTranslations();
+  }
+
+  /* ==========================================================
+     إعدادات السيرفرات
+     ========================================================== */
   const CONFIG = {
     host: 'http://clsmarview.club:2082',
     username: '17954823',
@@ -1296,9 +1647,6 @@
     maxChannels: 700
   };
 
-  /* ==========================================================
-     إعدادات سيرفر الأفلام والمسلسلات (Xtream الجديد)
-     ========================================================== */
   const VOD_CONFIG = {
     host: 'http://4k-your.com',
     username: '2023d09a67',
@@ -1319,9 +1667,6 @@
   let scheduleLoaded = false;
   let newsLoaded = false;
 
-  /* ==========================================================
-     حالة قسم الأفلام والمسلسلات
-     ========================================================== */
   let vodMovies = [];
   let vodSeries = [];
   let vodItems = [];
@@ -1332,22 +1677,17 @@
   const episodesMap = {};
   let currentEpisodesSeriesName = '';
 
-  /* ==========================================================
-     إعدادات الكاش والمهلة الزمنية
-     ========================================================== */
   const VOD_CACHE_KEY = 'vod_cache_v3';
-  const VOD_CACHE_TTL = 30 * 60 * 1000;        // 30 دقيقة
-  const VOD_FETCH_TIMEOUT = 20 * 1000;         // 20 ثانية
+  const VOD_CACHE_TTL = 30 * 60 * 1000;
+  const VOD_FETCH_TIMEOUT = 20 * 1000;
   const VOD_CACHE_MAX_PER_TYPE = 500;
 
-  /* كاش الحلقات (series_info) - المفتاح الرئيسي للسرعة */
   const SERIES_INFO_CACHE_KEY = 'series_info_cache_v1';
-  const SERIES_INFO_TTL = 12 * 60 * 60 * 1000; // 12 ساعة
-  const seriesInfoCache = {};                  // series_id -> { t, episodes }
-  const seriesInfoLoading = {};                // series_id -> Promise
+  const SERIES_INFO_TTL = 12 * 60 * 60 * 1000;
+  const seriesInfoCache = {};
+  const seriesInfoLoading = {};
   let seriesPreloadStarted = false;
 
-  /* تحميل كاش الحلقات من localStorage عند بدء التشغيل */
   (function initSeriesInfoCache() {
     try {
       const raw = localStorage.getItem(SERIES_INFO_CACHE_KEY);
@@ -1444,8 +1784,23 @@
     else if (section === 'schedule') openSchedule();
     else if (section === 'news') openNews();
     else if (section === 'series') openVod();
+    else if (section === 'settings') openSettings();
   }
 
+  /* ==========================================================
+     إعدادات (Settings)
+     ========================================================== */
+  function openSettings() {
+    document.getElementById('settingsView').classList.add('active');
+  }
+
+  function closeSettings() {
+    document.getElementById('settingsView').classList.remove('active');
+  }
+
+  /* ==========================================================
+     الشاشات الأخرى
+     ========================================================== */
   function openChannels() {
     document.getElementById('channelsView').classList.add('active');
     if (!channelsLoaded && !channelsLoading) loadChannels();
@@ -1459,7 +1814,7 @@
     player.removeAttribute('src');
     player.load();
     document.getElementById('playerStatus').style.display = 'flex';
-    document.getElementById('playerStatus').textContent = 'اختر قناة من القائمة للتشغيل';
+    document.getElementById('playerStatus').textContent = t('choose_channel');
     activeStreamId = null;
   }
 
@@ -1481,18 +1836,21 @@
     document.getElementById('newsView').classList.remove('active');
   }
 
+  /* ==========================================================
+     الجدول (Schedule)
+     ========================================================== */
   async function loadSchedule() {
     const body = document.getElementById('scheduleBody');
-    body.innerHTML = '<div class="schedule-loading">⏳ جاري تحميل المباريات...</div>';
+    body.innerHTML = `<div class="schedule-loading">${t('loading_matches')}</div>`;
 
     try {
       const res = await fetch(SCHEDULE_API);
-      if (!res.ok) throw new Error('فشل الاتصال');
+      if (!res.ok) throw new Error('Failed');
       const data = await res.json();
       const events = data.events || [];
 
       if (!events.length) {
-        body.innerHTML = '<div class="schedule-loading">لا توجد مباريات حالياً</div>';
+        body.innerHTML = `<div class="schedule-loading">${t('no_content')}</div>`;
         scheduleLoaded = true;
         return;
       }
@@ -1506,8 +1864,8 @@
       scheduleLoaded = true;
 
     } catch (err) {
-      console.error('خطأ تحميل الجدول:', err);
-      body.innerHTML = `<div class="schedule-error">تعذّر تحميل المباريات<br><small style="opacity:.7">${escapeHtml(err.message || '')}</small></div>`;
+      console.error('Schedule error:', err);
+      body.innerHTML = `<div class="schedule-error">${t('error_load')}<br><small style="opacity:.7">${escapeHtml(err.message || '')}</small></div>`;
     }
   }
 
@@ -1539,20 +1897,20 @@
     const state = statusType.state || 'pre';
 
     let statusClass = 'scheduled';
-    let statusText = 'لم تبدأ';
+    let statusText = currentLang === 'ar' ? 'لم تبدأ' : 'Upcoming';
     if (state === 'in') {
       statusClass = 'live';
-      statusText = 'مباشر';
+      statusText = currentLang === 'ar' ? 'مباشر' : 'Live';
     } else if (state === 'post') {
       statusClass = 'final';
-      statusText = 'انتهت';
+      statusText = currentLang === 'ar' ? 'انتهت' : 'Final';
     }
 
     let scoreDisplay = '';
     if (state === 'pre') {
       const matchDate = new Date(ev.date);
-      const timeString = matchDate.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-      const dateString = matchDate.toLocaleDateString('ar-EG', { weekday: 'long', month: 'long', day: 'numeric' }).replace('،', '');
+      const timeString = matchDate.toLocaleTimeString(currentLang === 'ar' ? 'ar-EG' : 'en-US', { hour: '2-digit', minute: '2-digit' });
+      const dateString = matchDate.toLocaleDateString(currentLang === 'ar' ? 'ar-EG' : 'en-US', { weekday: 'long', month: 'long', day: 'numeric' }).replace('،', '');
 
       scoreDisplay = `
         <div class="score-side">
@@ -1597,24 +1955,27 @@
     `;
   }
 
+  /* ==========================================================
+     الأخبار (News)
+     ========================================================== */
   async function loadNews() {
     const body = document.getElementById('newsBody');
-    body.innerHTML = '<div class="news-loading">⏳ جاري تحميل وترجمة الأخبار...</div>';
+    body.innerHTML = `<div class="news-loading">${t('loading_news')}</div>`;
 
     try {
       const res = await fetch(NEWS_API);
-      if (!res.ok) throw new Error('فشل الاتصال');
+      if (!res.ok) throw new Error('Failed');
       const data = await res.json();
       const articles = data.articles || [];
 
       if (!articles.length) {
-        body.innerHTML = '<div class="news-loading">لا توجد أخبار حالياً</div>';
+        body.innerHTML = `<div class="news-loading">${t('no_content')}</div>`;
         newsLoaded = true;
         return;
       }
 
       const translationPromises = articles.map(async (article) => {
-        const translatedTitle = await translateText(article.headline || 'بدون عنوان');
+        const translatedTitle = await translateText(article.headline || 'No Title');
         const translatedDesc = await translateText(article.description || '');
         return renderNewsCard(article, translatedTitle, translatedDesc);
       });
@@ -1625,19 +1986,19 @@
       newsLoaded = true;
 
     } catch (err) {
-      console.error('خطأ تحميل الأخبار:', err);
-      body.innerHTML = `<div class="news-error">تعذّر تحميل الأخبار<br><small style="opacity:.7">${escapeHtml(err.message || '')}</small></div>`;
+      console.error('News error:', err);
+      body.innerHTML = `<div class="news-error">${t('error_load')}<br><small style="opacity:.7">${escapeHtml(err.message || '')}</small></div>`;
     }
   }
 
   function renderNewsCard(article, translatedTitle, translatedDesc) {
     const image = article.images && article.images[0] ? article.images[0].url : '';
-    const source = "نجم الشاشات";
+    const source = currentLang === 'ar' ? "نجم الشاشات" : "Screen Star";
     
     const pubDate = article.published ? new Date(article.published) : null;
     let dateString = '';
     if (pubDate) {
-      dateString = pubDate.toLocaleDateString('ar-EG', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      dateString = pubDate.toLocaleDateString(currentLang === 'ar' ? 'ar-EG' : 'en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
     }
 
     return `
@@ -1655,13 +2016,16 @@
     `;
   }
 
+  /* ==========================================================
+     القنوات (Channels)
+     ========================================================== */
   async function loadChannels() {
     channelsLoading = true;
     const catList = document.getElementById('catList');
     const chList  = document.getElementById('chList');
 
-    catList.innerHTML = '<div class="list-loading">تحميل الفئات...</div>';
-    chList.innerHTML  = '<div class="list-loading">جارِ تحميل القنوات (قد يأخذ لحظات)...</div>';
+    catList.innerHTML = `<div class="list-loading">${t('loading')}</div>`;
+    chList.innerHTML  = `<div class="list-loading">${t('loading_channels')}</div>`;
 
     try {
       const base = `${CONFIG.host}/player_api.php?username=${encodeURIComponent(CONFIG.username)}&password=${encodeURIComponent(CONFIG.password)}`;
@@ -1671,7 +2035,7 @@
         fetch(`${base}&action=get_live_streams`)
       ]);
 
-      if (!catsRes.ok || !chRes.ok) throw new Error('فشل الاتصال بالسيرفر');
+      if (!catsRes.ok || !chRes.ok) throw new Error('Connection failed');
 
       const catsData = await catsRes.json();
       const chData   = await chRes.json();
@@ -1688,18 +2052,18 @@
 
     } catch (err) {
       channelsLoading = false;
-      catList.innerHTML = '<div class="list-error">تعذّر تحميل الفئات</div>';
-      chList.innerHTML  = `<div class="list-error">تعذّر تحميل القنوات<br><small style="opacity:.7">${escapeHtml(err.message || '')}</small></div>`;
+      catList.innerHTML = `<div class="list-error">${t('error_load')}</div>`;
+      chList.innerHTML  = `<div class="list-error">${t('error_load')}<br><small style="opacity:.7">${escapeHtml(err.message || '')}</small></div>`;
     }
   }
 
   function renderCategories() {
     const catList = document.getElementById('catList');
-    let html = `<div class="cat-item ${currentCategory === 'all' ? 'active' : ''}" onclick="selectCategory('all')">الكل</div>`;
+    let html = `<div class="cat-item ${currentCategory === 'all' ? 'active' : ''}" onclick="selectCategory('all')">${t('all')}</div>`;
 
     categories.forEach(cat => {
       const id = String(cat.category_id);
-      const name = escapeHtml(cat.category_name || 'بدون اسم');
+      const name = escapeHtml(cat.category_name || '---');
       html += `<div class="cat-item ${currentCategory === id ? 'active' : ''}" onclick="selectCategory('${id}')">${name}</div>`;
     });
 
@@ -1730,7 +2094,7 @@
       : allChannels.filter(c => String(c.category_id) === String(currentCategory));
 
     if (!filtered.length) {
-      chList.innerHTML = '<div class="list-empty">لا توجد قنوات في هذه الفئة</div>';
+      chList.innerHTML = `<div class="list-empty">${t('no_content')}</div>`;
       return;
     }
 
@@ -1761,7 +2125,7 @@
 
       const name = document.createElement('div');
       name.className = 'ch-name';
-      name.textContent = ch.name || 'قناة بدون اسم';
+      name.textContent = ch.name || '---';
 
       item.appendChild(num);
       item.appendChild(icon);
@@ -1795,7 +2159,7 @@
     player.load();
 
     status.style.display = 'flex';
-    status.textContent = '⏳ جاري الاتصال بالقناة...';
+    status.textContent = t('connecting');
 
     const url = `${CONFIG.host}/live/${encodeURIComponent(CONFIG.username)}/${encodeURIComponent(CONFIG.password)}/${ch.stream_id}.m3u8`;
 
@@ -1818,17 +2182,17 @@
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
               status.style.display = 'flex';
-              status.textContent = '⚠️ خطأ في الشبكة، جاري المحاولة...';
+              status.textContent = '⚠️ Network Error, retrying...';
               try { hls.startLoad(); } catch(e){}
               break;
             case Hls.ErrorTypes.MEDIA_ERROR:
               status.style.display = 'flex';
-              status.textContent = '⚠️ خطأ في الوسائط، جاري الاسترداد...';
+              status.textContent = '⚠️ Media Error, recovering...';
               try { hls.recoverMediaError(); } catch(e){}
               break;
             default:
               status.style.display = 'flex';
-              status.textContent = '❌ تعذّر تشغيل القناة';
+              status.textContent = t('play_error');
               try { hls.destroy(); } catch(e){}
               hls = null;
               break;
@@ -1844,18 +2208,17 @@
       }, { once: true });
       player.addEventListener('error', () => {
         status.style.display = 'flex';
-        status.textContent = '❌ تعذّر تشغيل القناة';
+        status.textContent = t('play_error');
       }, { once: true });
     } else {
       status.style.display = 'flex';
-      status.textContent = '❌ المتصفح لا يدعم تشغيل HLS';
+      status.textContent = '❌ HLS not supported';
     }
   }
 
   /* ==========================================================
-     قسم الأفلام والمسلسلات (VOD) - نسخة فائقة السرعة
+     الأفلام والمسلسلات (VOD)
      ========================================================== */
-
   function openVod() {
     document.getElementById('vodView').classList.add('active');
     if (!vodLoaded && !vodLoading) loadVod();
@@ -1865,7 +2228,6 @@
     document.getElementById('vodView').classList.remove('active');
   }
 
-  /* fetch مع مهلة زمنية */
   async function fetchJsonWithTimeout(url, ms) {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), ms);
@@ -1880,9 +2242,6 @@
     }
   }
 
-  /* ==========================================================
-     كاش الأفلام/المسلسلات
-     ========================================================== */
   function readVodCache() {
     try {
       const raw = localStorage.getItem(VOD_CACHE_KEY);
@@ -1908,9 +2267,6 @@
     }
   }
 
-  /* ==========================================================
-     كاش معلومات الحلقات (series_info) - الأهم للسرعة
-     ========================================================== */
   function saveSeriesInfoCache() {
     try {
       const entries = Object.entries(seriesInfoCache)
@@ -1986,9 +2342,7 @@
         const sid = queue[idx++];
         try {
           await fetchSeriesInfo(sid);
-        } catch (e) {
-          // تجاهل
-        }
+        } catch (e) {}
       }
     }
 
@@ -1997,9 +2351,6 @@
     await Promise.allSettled(workers);
   }
 
-  /* ==========================================================
-     تحميل قائمة الأفلام والمسلسلات
-     ========================================================== */
   async function loadVod() {
     vodLoading = true;
     const grid = document.getElementById('vodGrid');
@@ -2014,7 +2365,7 @@
       return;
     }
 
-    grid.innerHTML = '<div class="vod-loading">⏳ جاري تحميل الأفلام والمسلسلات...</div>';
+    grid.innerHTML = `<div class="vod-loading">${t('loading_vod')}</div>`;
 
     const base = `${VOD_CONFIG.host}/player_api.php?username=${encodeURIComponent(VOD_CONFIG.username)}&password=${encodeURIComponent(VOD_CONFIG.password)}`;
 
@@ -2044,7 +2395,7 @@
           vodMovies = data.map(m => ({
             type: 'movie',
             id: m.stream_id,
-            title: m.name || 'بدون عنوان',
+            title: m.name || '---',
             poster: m.stream_icon || '',
             rating: m.rating || '',
             ext: m.container_extension || 'mp4'
@@ -2063,7 +2414,7 @@
           vodSeries = data.map(s => ({
             type: 'series',
             id: s.series_id,
-            title: s.name || 'بدون عنوان',
+            title: s.name || '---',
             poster: s.cover || '',
             rating: s.rating || ''
           }));
@@ -2080,9 +2431,9 @@
     const grid = document.getElementById('vodGrid');
     if (!vodMovies.length && !vodSeries.length) {
       grid.innerHTML = `<div class="vod-empty">
-        ❌ تعذّر تحميل المحتوى<br>
-        <small style="opacity:.7">تحقق من الاتصال بالإنترنت</small><br>
-        <button class="vod-retry-btn" onclick="reloadVod()">🔄 إعادة المحاولة</button>
+        ❌ ${t('error_load')}<br>
+        <small style="opacity:.7">${t('error_retry')}</small><br>
+        <button class="vod-retry-btn" onclick="reloadVod()">${t('retry')}</button>
       </div>`;
       return;
     }
@@ -2118,8 +2469,8 @@
 
   function setVodFilter(filter) {
     currentVodFilter = filter;
-    document.querySelectorAll('.vod-tab').forEach(t => {
-      t.classList.toggle('active', t.dataset.filter === filter);
+    document.querySelectorAll('.vod-tab').forEach(t_btn => {
+      t_btn.classList.toggle('active', t_btn.dataset.filter === filter);
     });
     renderVodGrid();
   }
@@ -2133,7 +2484,7 @@
     else if (currentVodFilter === 'series') list = vodItems.filter(x => x.type === 'series');
 
     if (!list.length) {
-      grid.innerHTML = '<div class="vod-empty">لا يوجد محتوى في هذا التصنيف</div>';
+      grid.innerHTML = `<div class="vod-empty">${t('no_content')}</div>`;
       return;
     }
 
@@ -2146,7 +2497,7 @@
 
       const badge = document.createElement('div');
       badge.className = 'vod-badge ' + (item.type === 'movie' ? 'movie' : 'series');
-      badge.textContent = item.type === 'movie' ? 'فيلم' : 'مسلسل';
+      badge.textContent = item.type === 'movie' ? t('movie_badge') : t('series_badge');
 
       if (item.rating && parseFloat(item.rating) > 0) {
         const rating = document.createElement('div');
@@ -2200,13 +2551,13 @@
   function playVodMovie(item) {
     const ext = item.ext || 'mp4';
     const url = `${VOD_CONFIG.host}/movie/${encodeURIComponent(VOD_CONFIG.username)}/${encodeURIComponent(VOD_CONFIG.password)}/${item.id}.${ext}`;
-    openVodPlayer(url, item.title, 'فيلم • ' + (item.rating ? '★ ' + item.rating : ''));
+    openVodPlayer(url, item.title, t('movie_badge') + ' • ' + (item.rating ? '★ ' + item.rating : ''));
   }
 
   async function openSeriesDetail(item) {
     const seriesId = String(item.id);
     currentEpisodesSeriesName = item.title;
-    document.getElementById('episodesTitle').textContent = item.title || 'مسلسل';
+    document.getElementById('episodesTitle').textContent = item.title || t('series');
     document.getElementById('episodesView').classList.add('active');
     const body = document.getElementById('episodesBody');
 
@@ -2217,24 +2568,22 @@
     }
 
     if (seriesInfoLoading[seriesId]) {
-      body.innerHTML = '<div class="vod-loading" style="padding:20px">⏳</div>';
+      body.innerHTML = `<div class="vod-loading" style="padding:20px">${t('loading')}</div>`;
       try {
         const info = await seriesInfoLoading[seriesId];
         renderEpisodesToBody(info.episodes, body);
         return;
-      } catch (e) {
-        // fallback
-      }
+      } catch (e) {}
     }
 
-    body.innerHTML = '<div class="vod-loading" style="padding:20px">⏳</div>';
+    body.innerHTML = `<div class="vod-loading" style="padding:20px">${t('loading_episodes')}</div>`;
     try {
       const info = await fetchSeriesInfo(seriesId);
       renderEpisodesToBody(info.episodes, body);
     } catch (err) {
       body.innerHTML = `<div class="vod-error">
-        تعذّر تحميل الحلقات<br>
-        <button class="vod-retry-btn" onclick="retrySeriesInfo('${escapeHtml(seriesId)}')">🔄 إعادة المحاولة</button>
+        ${t('error_load')}<br>
+        <button class="vod-retry-btn" onclick="retrySeriesInfo('${escapeHtml(seriesId)}')">${t('retry')}</button>
       </div>`;
     }
   }
@@ -2249,7 +2598,7 @@
     const seasons = Object.keys(episodes).filter(k => !isNaN(k)).sort((a, b) => Number(a) - Number(b));
 
     if (!seasons.length) {
-      body.innerHTML = '<div class="vod-empty">لا توجد حلقات متاحة</div>';
+      body.innerHTML = `<div class="vod-empty">${t('no_content')}</div>`;
       return;
     }
 
@@ -2257,12 +2606,12 @@
     seasons.forEach(seasonNum => {
       const eps = episodes[seasonNum] || [];
       if (!eps.length) return;
-      html += `<div class="season-title">الموسم ${seasonNum}</div>`;
+      html += `<div class="season-title">${t('season')} ${seasonNum}</div>`;
       eps.forEach(ep => {
         const epId = String(ep.id || '');
         if (!epId) return;
         episodesMap[epId] = ep;
-        const epTitle = ep.title || ('حلقة ' + (ep.episode_num || ''));
+        const epTitle = ep.title || (`${t('episode')} ` + (ep.episode_num || ''));
         const num = ep.episode_num || '';
         html += `
           <div class="episode-item" onclick="playEpisodeById('${epId}')">
@@ -2274,7 +2623,7 @@
       });
     });
 
-    body.innerHTML = html || '<div class="vod-empty">لا توجد حلقات</div>';
+    body.innerHTML = html || `<div class="vod-empty">${t('no_content')}</div>`;
   }
 
   function closeEpisodes() {
@@ -2286,7 +2635,7 @@
     if (!ep) return;
     const ext = ep.container_extension || 'mp4';
     const url = `${VOD_CONFIG.host}/series/${encodeURIComponent(VOD_CONFIG.username)}/${encodeURIComponent(VOD_CONFIG.password)}/${epId}.${ext}`;
-    const epLabel = 'الموسم ' + (ep.season || '') + ' • حلقة ' + (ep.episode_num || '');
+    const epLabel = t('season') + ' ' + (ep.season || '') + ' • ' + t('episode') + ' ' + (ep.episode_num || '');
     openVodPlayer(url, currentEpisodesSeriesName, epLabel);
   }
 
@@ -2305,7 +2654,7 @@
     player.load();
 
     status.style.display = 'flex';
-    status.textContent = '⏳ جاري التحميل...';
+    status.textContent = t('loading_video');
 
     const isHls = /\.m3u8(\?|$)/i.test(url);
 
@@ -2326,7 +2675,7 @@
       vodHls.on(Hls.Events.ERROR, (evt, data) => {
         if (data.fatal) {
           status.style.display = 'flex';
-          status.textContent = '❌ تعذّر التشغيل';
+          status.textContent = t('play_error');
           try { vodHls.destroy(); } catch(e){}
           vodHls = null;
         }
@@ -2339,7 +2688,7 @@
       }, { once: true });
       player.addEventListener('error', () => {
         status.style.display = 'flex';
-        status.textContent = '❌ صيغة الفيديو غير مدعومة';
+        status.textContent = t('play_error');
       }, { once: true });
     }
   }
@@ -2362,6 +2711,16 @@
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
+  }
+
+  /* ==========================================================
+     تشغيل الترجمة عند بدء التطبيق
+     ========================================================== */
+  document.addEventListener('DOMContentLoaded', () => {
+    setLanguage(currentLang);
+  });
+  if (document.readyState !== 'loading') {
+    setLanguage(currentLang);
   }
 </script>
 
