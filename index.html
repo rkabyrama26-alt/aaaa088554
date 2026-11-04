@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>القائمة الرئيسية</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Tajawal', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    position: relative;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+
+  .bg {
+    position: fixed;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.5) 75%, rgba(0,0,0,0.95) 100%),
+      url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200&q=80') center/cover no-repeat;
+    filter: brightness(0.55) saturate(1.2);
+    z-index: 0;
+  }
+
+  .bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, rgba(100, 50, 180, 0.15) 0%, transparent 60%);
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    width: 100%;
+    max-width: 240px;
+    margin: 0 auto;
+  }
+
+  .card {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(145deg, rgba(75, 28, 130, 0.95), rgba(38, 14, 70, 0.98));
+    border: 1.5px solid #c9a0ff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+      0 5px 15px rgba(0, 0, 0, 0.5),
+      0 0 12px rgba(180, 140, 255, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+  }
+
+  .card:active {
+    transform: scale(0.92);
+  }
+
+  .card:hover {
+    box-shadow: 
+      0 8px 20px rgba(0, 0, 0, 0.6),
+      0 0 20px rgba(180, 140, 255, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  .card.center {
+    grid-column: 1 / -1;
+    width: calc((100% - 14px) / 2);
+    justify-self: center;
+  }
+
+  .icon {
+    width: 40%;
+    max-width: 38px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .label {
+    font-size: clamp(0.85rem, 3.2vw, 0.95rem);
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-height: 650px) {
+    .grid {
+      gap: 12px;
+      max-width: 210px;
+    }
+    .card {
+      border-radius: 16px;
+    }
+    .card.center {
+      width: calc((100% - 12px) / 2);
+    }
+  }
+
+  /* ============================================
+     CHANNELS PLAYER VIEW
+     ============================================ */
+  .channels-view {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: #0a0618;
+    display: none;
+    flex-direction: column;
+  }
+
+  .channels-view.active {
+    display: flex;
+  }
+
+  .player-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-bottom: 1px solid rgba(201, 160, 255, 0.15);
+    flex-shrink: 0;
+  }
+
+  .player-wrap video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #000;
+  }
+
+  .back-btn {
+    position: absolute;
+    top: 4px;
+    left: 8px;
+    z-index: 20;
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    filter: drop-shadow(0px 2px 6px rgba(0, 0, 0, 0.9));
+  }
+  
+  .back-btn svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  #playerStatus {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #b39ddb;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    padding: 10px;
+    background: #0a0618;
+    pointer-events: none;
+  }
+
+  .channels-body {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+  }
+
+  .cat-list {
+    width: 110px;
+    overflow-y: auto;
+    background: #120a24;
+    border-left: 1px solid rgba(201, 160, 255, 0.1);
+    padding: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .cat-list::-webkit-scrollbar,
+  .ch-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cat-item {
+    padding: 14px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #b39ddb;
+    cursor: pointer;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    transition: all 0.2s;
+    word-break: break-word;
+    line-height: 1.3;
+  }
+
+  .cat-item:hover {
+    background: rgba(75, 28, 130, 0.4);
+  }
+
+  .cat-item.active {
+    background: #4b1c82;
+    color: #fff;
+    border-right: 3px solid #c9a0ff;
+  }
+
+  .ch-list {
+    flex: 1;
+    overflow-y: auto;
+    background: #0a0618;
+    padding: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .ch-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    cursor: pointer;
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background 0.2s;
+  }
+
+  .ch-item:hover,
+  .ch-item.active {
+    background: rgba(75, 28, 130, 0.5);
+  }
+
+  .ch-num {
+    font-size: 12px;
+    color: #7e6ca8;
+    font-weight: 900;
+    min-width: 22px;
+    text-align: center;
+  }
+
+  .ch-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 4px;
+    background: #150e26;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0 10px;
+    flex-shrink: 0;
+  }
+
+  .ch-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ch-icon .ch-icon-placeholder {
+    color: #4a2a80;
+    font-size: 16px;
+    font-weight: 900;
+  }
+
+  .ch-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #e0d0ff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+  }
+
+  .list-loading,
+  .list-error,
+  .list-empty {
+    padding: 24px 12px;
+    text-align: center;
+    color: #b39ddb;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .list-error { color: #ff7777; }
+
+  @media (max-width: 360px) {
+    .cat-list { width: 95px; }
+    .cat-item { font-size: 11px; padding: 12px 5px; }
+    .ch-name { font-size: 12px; }
+  }
+
+  /* ============================================
+     SCHEDULE VIEW
+     ============================================ */
+  .schedule-view {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: #0a0618;
+    display: none;
+    flex-direction: column;
+  }
+
+  .schedule-view.active {
+    display: flex;
+  }
+
+  .schedule-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 12px 16px;
+    background: #0a0618;
+    flex-shrink: 0;
+  }
+
+  .schedule-header .back-btn {
+    position: static;
+    color: #d8c4ff;
+    filter: none;
+    margin-right: auto;
+  }
+
+  .schedule-header .back-btn svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .schedule-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .schedule-body::-webkit-scrollbar {
+    display: none;
+  }
+
+  .match-card {
+    position: relative;
+    background: linear-gradient(145deg, #1a1030 0%, #0f0a1e 100%);
+    border: 1px solid rgba(201, 160, 255, 0.18);
+    border-radius: 18px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .match-card:active {
+    transform: scale(0.98);
+  }
+
+  .match-top {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .match-status-badge {
+    font-size: 10px;
+    font-weight: 900;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .match-status-badge.live {
+    background: rgba(255, 60, 60, 0.2);
+    color: #ff6b6b;
+    border: 1px solid rgba(255, 60, 60, 0.4);
+    animation: pulse-live 1.5s infinite;
+  }
+
+  .match-status-badge.final {
+    background: rgba(160, 160, 160, 0.15);
+    color: #aaa;
+    border: 1px solid rgba(160, 160, 160, 0.25);
+  }
+
+  .match-status-badge.scheduled {
+    background: rgba(100, 200, 255, 0.15);
+    color: #6bc5ff;
+    border: 1px solid rgba(100, 200, 255, 0.3);
+  }
+
+  @keyframes pulse-live {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .match-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .team-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .team-logo {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+  }
+
+  .team-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #e0d0ff;
+    text-align: center;
+    line-height: 1.3;
+    width: 100%;
+    max-width: 110px;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .score-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+  }
+
+  .score-numbers {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .score-num {
+    font-size: 26px;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    line-height: 1;
+  }
+
+  .score-num.winner {
+    color: #c9a0ff;
+  }
+
+  .score-divider {
+    font-size: 18px;
+    font-weight: 900;
+    color: #5a4a7a;
+  }
+
+  .match-time-display {
+    font-size: 16px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.2;
+  }
+  
+  .match-date-display {
+    font-size: 11px;
+    font-weight: 700;
+    color: #b39ddb;
+    margin-top: 2px;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .schedule-loading,
+  .schedule-error {
+    padding: 40px 20px;
+    text-align: center;
+    color: #b39ddb;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .schedule-error { color: #ff7777; }
+
+  /* ============================================
+     NEWS VIEW
+     ============================================ */
+  .news-view {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: #0a0618;
+    display: none;
+    flex-direction: column;
+  }
+
+  .news-view.active {
+    display: flex;
+  }
+
+  .news-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 12px 16px;
+    background: #0a0618;
+    flex-shrink: 0;
+  }
+
+  .news-header .back-btn {
+    position: static;
+    color: #d8c4ff;
+    filter: none;
+    margin-right: auto;
+  }
+
+  .news-header .back-btn svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .news-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .news-body::-webkit-scrollbar {
+    display: none;
+  }
+
+  .news-card {
+    position: relative;
+    background: linear-gradient(145deg, #1a1030 0%, #0f0a1e 100%);
+    border: 1px solid rgba(201, 160, 255, 0.18);
+    border-radius: 18px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .news-card:active {
+    transform: scale(0.98);
+  }
+
+  .news-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    background: #150e26;
+  }
+
+  .news-content {
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .news-title {
+    font-size: 15px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .news-desc {
+    font-size: 13px;
+    font-weight: 500;
+    color: #b39ddb;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .news-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #7e6ca8;
+  }
+
+  .news-source {
+    color: #c9a0ff;
+  }
+
+  .news-loading,
+  .news-error {
+    padding: 40px 20px;
+    text-align: center;
+    color: #b39ddb;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .news-error { color: #ff7777; }
+
+  /* ============================================
+     VOD (MOVIES & SERIES) VIEW
+     ============================================ */
+  .vod-view {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: #0a0618;
+    display: none;
+    flex-direction: column;
+  }
+
+  .vod-view.active {
+    display: flex;
+  }
+
+  .vod-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: #0a0618;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(201, 160, 255, 0.1);
+  }
+
+  .vod-header .back-btn {
+    position: static;
+    color: #d8c4ff;
+    filter: none;
+    margin-left: 12px;
+  }
+
+  .vod-header .back-btn svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .vod-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .vod-body::-webkit-scrollbar {
+    display: none;
+  }
+
+  .vod-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .vod-item {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 2 / 3;
+    background: #150e26;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    transition: transform 0.2s;
+  }
+
+  .vod-item:active {
+    transform: scale(0.95);
+  }
+
+  .vod-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .vod-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #5a2a8a;
+    font-size: 24px;
+    font-weight: 900;
+  }
+
+  .vod-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    padding: 20px 6px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .vod-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(201, 160, 255, 0.85);
+    color: #000;
+    font-size: 9px;
+    font-weight: 900;
+    padding: 2px 6px;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+  }
+
+  /* مشغل VOD */
+  .vod-player-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: #000;
+    display: none;
+    flex-direction: column;
+  }
+
+  .vod-player-modal.active {
+    display: flex;
+  }
+
+  .vod-player-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+    display: flex;
+    align-items: center;
+    z-index: 10;
+  }
+
+  .vod-player-header .back-btn {
+    position: static;
+    color: #fff;
+  }
+
+  .vod-player-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-right: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .vod-player-video {
+    width: 100%;
+    height: 100%;
+    background: #000;
+  }
+  
+  /* لودر التمرير اللانهائي */
+  .vod-sentinel {
+    text-align: center;
+    padding: 20px;
+    color: #b39ddb;
+    font-size: 13px;
+    font-weight: 700;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+  <div class="bg"></div>
+
+  <div class="container">
+    <div class="grid">
+
+      <!-- قنوات -->
+      <div class="card" onclick="goTo('channels')">
+        <div class="icon">
+          <svg viewBox="0 0 64 64" fill="none">
+            <rect x="6" y="14" width="52" height="34" rx="6" stroke="#42A5F5" stroke-width="3"/>
+            <path d="M26 24l14 7-14 7V24z" fill="#42A5F5"/>
+            <path d="M20 54h24" stroke="#42A5F5" stroke-width="3" stroke-linecap="round"/>
+            <path d="M32 48v6" stroke="#42A5F5" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="label">قنوات</div>
+      </div>
+
+      <!-- جدول -->
+      <div class="card" onclick="goTo('schedule')">
+        <div class="icon">
+          <svg viewBox="0 0 64 64" fill="none">
+            <rect x="12" y="16" width="40" height="38" rx="6" stroke="#4DD0E1" stroke-width="3"/>
+            <path d="M12 28h40" stroke="#4DD0E1" stroke-width="3"/>
+            <path d="M22 8v12M42 8v12" stroke="#4DD0E1" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="24" cy="38" r="3" fill="#4DD0E1"/>
+            <circle cx="32" cy="38" r="3" fill="#4DD0E1"/>
+            <circle cx="40" cy="38" r="3" fill="#4DD0E1"/>
+            <circle cx="24" cy="46" r="3" fill="#4DD0E1"/>
+            <circle cx="32" cy="46" r="3" fill="#4DD0E1"/>
+          </svg>
+        </div>
+        <div class="label">جدول</div>
+      </div>
+
+      <!-- أخبار -->
+      <div class="card" onclick="goTo('news')">
+        <div class="icon">
+          <svg viewBox="0 0 64 64" fill="none">
+            <rect x="10" y="14" width="44" height="36" rx="4" stroke="#FFB74D" stroke-width="3"/>
+            <path d="M18 22h20" stroke="#FFB74D" stroke-width="3" stroke-linecap="round"/>
+            <path d="M18 30h28" stroke="#FFB74D" stroke-width="3" stroke-linecap="round"/>
+            <path d="M18 38h28" stroke="#FFB74D" stroke-width="3" stroke-linecap="round"/>
+            <path d="M18 46h16" stroke="#FFB74D" stroke-width="3" stroke-linecap="round"/>
+            <rect x="38" y="18" width="10" height="10" rx="2" fill="#FFB74D"/>
+          </svg>
+        </div>
+        <div class="label">أخبار</div>
+      </div>
+
+      <!-- مسلسلات -->
+      <div class="card" onclick="goTo('series')">
+        <div class="icon">
+          <svg viewBox="0 0 64 64" fill="none">
+            <rect x="10" y="24" width="44" height="28" rx="4" fill="#E91E63"/>
+            <path d="M10 24l8-10 4 2-8 10-4-2z" fill="#E91E63"/>
+            <path d="M22 24l8-10 4 2-8 10-4-2z" fill="#E91E63"/>
+            <path d="M34 24l8-10 4 2-8 10-4-2z" fill="#E91E63"/>
+            <path d="M46 24l8-10 4 2-8 10-4-2z" fill="#E91E63"/>
+            <path d="M28 34l10 5-10 5V34z" fill="#fff"/>
+          </svg>
+        </div>
+        <div class="label">مسلسلات</div>
+      </div>
+
+      <!-- إعدادات -->
+      <div class="card center" onclick="goTo('settings')">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="#CE93D8">
+            <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+          </svg>
+        </div>
+        <div class="label">إعدادات</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CHANNELS PLAYER VIEW -->
+  <div class="channels-view" id="channelsView">
+    <div class="player-wrap">
+      <button class="back-btn" onclick="closeChannels()" aria-label="رجوع">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+      <video id="player" controls playsinline preload="none"></video>
+      <div id="playerStatus">اختر قناة من القائمة للتشغيل</div>
+    </div>
+
+    <div class="channels-body">
+      <div class="ch-list" id="chList">
+        <div class="list-loading">جارِ تحميل القنوات...</div>
+      </div>
+      <div class="cat-list" id="catList">
+        <div class="list-loading">تحميل...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE VIEW -->
+  <div class="schedule-view" id="scheduleView">
+    <div class="schedule-header">
+      <button class="back-btn" onclick="closeSchedule()" aria-label="رجوع">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <div class="schedule-body" id="scheduleBody">
+      <div class="schedule-loading">⏳ جاري تحميل المباريات...</div>
+    </div>
+  </div>
+
+  <!-- NEWS VIEW -->
+  <div class="news-view" id="newsView">
+    <div class="news-header">
+      <button class="back-btn" onclick="closeNews()" aria-label="رجوع">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <div class="news-body" id="newsBody">
+      <div class="news-loading">⏳ جاري تحميل وترجمة الأخبار...</div>
+    </div>
+  </div>
+
+  <!-- VOD VIEW (MOVIES & SERIES) -->
+  <div class="vod-view" id="vodView">
+    <div class="vod-header">
+      <button class="back-btn" onclick="closeVOD()" aria-label="رجوع">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <div class="vod-body" id="vodBody">
+      <div class="news-loading">⏳ جاري تحميل الأفلام والمسلسلات...</div>
+    </div>
+  </div>
+
+  <!-- VOD PLAYER MODAL -->
+  <div class="vod-player-modal" id="vodPlayerModal">
+    <div class="vod-player-header">
+      <button class="back-btn" onclick="closeVODPlayer()" aria-label="رجوع">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+      <div class="vod-player-title" id="vodPlayerTitle">جاري التحميل...</div>
+    </div>
+    <video id="vodPlayer" class="vod-player-video" controls playsinline></video>
+  </div>
+
+  <!-- HLS.js -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+
+<script>
+  const CONFIG = {
+    host: 'http://clsmarview.club:2082',
+    username: '17954823',
+    password: '91459788',
+    maxChannels: 700
+  };
+
+  const VOD_CONFIG = {
+    host: 'http://4k-your.com',
+    username: '2023d09a67',
+    password: 'c66aedd3dc',
+    maxItems: 700
+  };
+
+  const SCHEDULE_API = 'https://site.api.espn.com/apis/site/v2/sports/soccer/all/scoreboard';
+  const NEWS_API = 'https://site.api.espn.com/apis/site/v2/sports/soccer/all/news?limit=30';
+
+  let allChannels = [];
+  let categories = [];
+  let currentCategory = 'all';
+  let channelsLoaded = false;
+  let channelsLoading = false;
+  let hls = null;
+  let activeStreamId = null;
+  let scheduleLoaded = false;
+  let newsLoaded = false;
+  let vodLoaded = false;
+  let vodHls = null;
+
+  // متغيرات قسم VOD (التمرير اللانهائي)
+  let vodData = [];
+  let vodRenderedCount = 0;
+  const VOD_BATCH_SIZE = 15;
+
+  const teamTranslations = {
+    "Real Madrid": "ريال مدريد", "Barcelona": "برشلونة", "Liverpool": "ليفربول",
+    "Manchester City": "مانشستر سيتي", "Manchester United": "مانشستر يونايتد",
+    "Arsenal": "أرسنال", "Chelsea": "تشيلسي", "Tottenham Hotspur": "توتنهام هوتسبير",
+    "Bayern Munich": "بايرن ميونخ", "Borussia Dortmund": "بوروسيا دورتموند",
+    "Juventus": "يوفنتوس", "AC Milan": "ميلان", "Inter Milan": "إنتر ميلان",
+    "Paris Saint-Germain": "باريس سان جيرمان", "PSG": "باريس سان جيرمان",
+    "Atletico Madrid": "أتلتيكو مدريد", "Sevilla": "إشبيلية", "Real Betis": "ريال بيتيس",
+    "Napoli": "نابولي", "Roma": "روما", "Lazio": "لاتسيو", "FC Porto": "بورتو",
+    "Benfica": "بنفيكا", "Ajax": "أياكس", "Fenerbahce": "فنربخشة", "Galatasaray": "غلطة سراي",
+    "AEK Athens": "أيك أثينا", "Al Hilal": "الهلال", "Al Nassr": "النصر",
+    "Al Ittihad": "الاتحاد", "Al Ahly": "الأهلي", "Zamalek": "الزمالك"
+  };
+
+  function getArabicTeamName(engName) {
+    if (!engName) return 'فريق';
+    if (teamTranslations[engName]) return teamTranslations[engName];
+    const lowerName = engName.toLowerCase();
+    for (const key in teamTranslations) {
+      if (lowerName.includes(key.toLowerCase())) return teamTranslations[key];
+    }
+    return engName;
+  }
+
+  async function translateText(text) {
+    if (!text) return '';
+    try {
+      const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ar&dt=t&q=${encodeURIComponent(text)}`);
+      if (!res.ok) throw new Error('Translation failed');
+      const data = await res.json();
+      return data[0].map(item => item[0]).join('');
+    } catch (e) {
+      return text;
+    }
+  }
+
+  async function fetchWithTimeout(resource, options = {}) {
+    const { timeout = 15000 } = options;
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    const response = await fetch(resource, {
+      ...options,
+      signal: controller.signal  
+    });
+    clearTimeout(id);
+    return response;
+  }
+
+  function goTo(section) {
+    if (section === 'channels') openChannels();
+    else if (section === 'schedule') openSchedule();
+    else if (section === 'news') openNews();
+    else if (section === 'series') openVOD();
+  }
+
+  /* ==========================================================
+     CHANNELS LOGIC
+     ========================================================== */
+  function openChannels() {
+    document.getElementById('channelsView').classList.add('active');
+    if (!channelsLoaded && !channelsLoading) loadChannels();
+  }
+
+  function closeChannels() {
+    document.getElementById('channelsView').classList.remove('active');
+    const player = document.getElementById('player');
+    try { player.pause(); } catch(e){}
+    if (hls) { try { hls.destroy(); } catch(e){} hls = null; }
+    player.removeAttribute('src');
+    player.load();
+    document.getElementById('playerStatus').style.display = 'flex';
+    document.getElementById('playerStatus').textContent = 'اختر قناة من القائمة للتشغيل';
+    activeStreamId = null;
+  }
+
+  async function loadChannels() {
+    channelsLoading = true;
+    const catList = document.getElementById('catList');
+    const chList  = document.getElementById('chList');
+
+    catList.innerHTML = '<div class="list-loading">تحميل الفئات...</div>';
+    chList.innerHTML  = '<div class="list-loading">جارِ تحميل القنوات...</div>';
+
+    try {
+      const base = `${CONFIG.host}/player_api.php?username=${encodeURIComponent(CONFIG.username)}&password=${encodeURIComponent(CONFIG.password)}`;
+      const [catsRes, chRes] = await Promise.all([
+        fetch(`${base}&action=get_live_categories`),
+        fetch(`${base}&action=get_live_streams`)
+      ]);
+      if (!catsRes.ok || !chRes.ok) throw new Error('فشل الاتصال');
+
+      const catsData = await catsRes.json();
+      const chData   = await chRes.json();
+
+      categories = Array.isArray(catsData) ? catsData : [];
+      const all  = Array.isArray(chData)   ? chData   : [];
+
+      allChannels = all.slice(0, CONFIG.maxChannels);
+      channelsLoaded = true;
+      channelsLoading = false;
+
+      renderCategories();
+      renderChannels();
+    } catch (err) {
+      channelsLoading = false;
+      catList.innerHTML = '<div class="list-error">تعذّر تحميل الفئات</div>';
+      chList.innerHTML  = `<div class="list-error">تعذّر تحميل القنوات</div>`;
+    }
+  }
+
+  function renderCategories() {
+    const catList = document.getElementById('catList');
+    let html = `<div class="cat-item ${currentCategory === 'all' ? 'active' : ''}" onclick="selectCategory('all')">الكل</div>`;
+    categories.forEach(cat => {
+      const id = String(cat.category_id);
+      const name = escapeHtml(cat.category_name || 'بدون اسم');
+      html += `<div class="cat-item ${currentCategory === id ? 'active' : ''}" onclick="selectCategory('${id}')">${name}</div>`;
+    });
+    catList.innerHTML = html;
+  }
+
+  function selectCategory(id) {
+    currentCategory = id;
+    document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
+    const items = document.querySelectorAll('.cat-item');
+    if (id === 'all') {
+      if (items[0]) items[0].classList.add('active');
+    } else {
+      const idx = categories.findIndex(c => String(c.category_id) === id);
+      if (idx >= 0 && items[idx + 1]) items[idx + 1].classList.add('active');
+    }
+    renderChannels();
+    document.getElementById('chList').scrollTop = 0;
+  }
+
+  function renderChannels() {
+    const chList = document.getElementById('chList');
+    const filtered = (currentCategory === 'all') ? allChannels : allChannels.filter(c => String(c.category_id) === String(currentCategory));
+
+    if (!filtered.length) {
+      chList.innerHTML = '<div class="list-empty">لا توجد قنوات</div>';
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+    filtered.forEach((ch, i) => {
+      const item = document.createElement('div');
+      item.className = 'ch-item' + (String(ch.stream_id) === String(activeStreamId) ? ' active' : '');
+      item.onclick = () => playChannelByStreamId(ch.stream_id);
+
+      const num = document.createElement('div');
+      num.className = 'ch-num';
+      num.textContent = i + 1;
+
+      const icon = document.createElement('div');
+      icon.className = 'ch-icon';
+      if (ch.stream_icon) {
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.src = ch.stream_icon;
+        img.onerror = () => { img.style.display = 'none'; icon.innerHTML = '<span class="ch-icon-placeholder">📺</span>'; };
+        icon.appendChild(img);
+      } else {
+        icon.innerHTML = '<span class="ch-icon-placeholder">📺</span>';
+      }
+
+      const name = document.createElement('div');
+      name.className = 'ch-name';
+      name.textContent = ch.name || 'قناة';
+
+      item.appendChild(num);
+      item.appendChild(icon);
+      item.appendChild(name);
+      frag.appendChild(item);
+    });
+    chList.innerHTML = '';
+    chList.appendChild(frag);
+  }
+
+  function playChannelByStreamId(streamId) {
+    const ch = allChannels.find(c => String(c.stream_id) === String(streamId));
+    if (!ch) return;
+    
+    const player = document.getElementById('player');
+    const status = document.getElementById('playerStatus');
+    activeStreamId = ch.stream_id;
+
+    document.querySelectorAll('.ch-item').forEach(el => {
+      el.classList.toggle('active', String(el.dataset.streamId) === String(ch.stream_id));
+    });
+
+    if (hls) { try { hls.destroy(); } catch(e){} hls = null; }
+    try { player.pause(); } catch(e){}
+    player.removeAttribute('src');
+    player.load();
+
+    status.style.display = 'flex';
+    status.textContent = '⏳ جاري الاتصال...';
+
+    const url = `${CONFIG.host}/live/${encodeURIComponent(CONFIG.username)}/${encodeURIComponent(CONFIG.password)}/${ch.stream_id}.m3u8`;
+
+    if (window.Hls && Hls.isSupported()) {
+      hls = new Hls({ enableWorker: true, lowLatencyMode: true, backBufferLength: 30 });
+      hls.loadSource(url);
+      hls.attachMedia(player);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        status.style.display = 'none';
+        player.play().catch(() => {});
+      });
+      hls.on(Hls.Events.ERROR, (evt, data) => {
+        if (data.fatal) {
+          if (data.type === Hls.ErrorTypes.NETWORK_ERROR) hls.startLoad();
+          else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) hls.recoverMediaError();
+          else { status.style.display = 'flex'; status.textContent = '❌ تعذّر التشغيل'; }
+        }
+      });
+    } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+      player.src = url;
+      player.addEventListener('loadedmetadata', () => { status.style.display = 'none'; player.play().catch(() => {}); }, { once: true });
+    } else {
+      status.style.display = 'flex';
+      status.textContent = '❌ غير مدعوم';
+    }
+  }
+
+  /* ==========================================================
+     SCHEDULE LOGIC
+     ========================================================== */
+  function openSchedule() {
+    document.getElementById('scheduleView').classList.add('active');
+    if (!scheduleLoaded) loadSchedule();
+  }
+
+  function closeSchedule() {
+    document.getElementById('scheduleView').classList.remove('active');
+  }
+
+  async function loadSchedule() {
+    const body = document.getElementById('scheduleBody');
+    body.innerHTML = '<div class="schedule-loading">⏳ جاري تحميل المباريات...</div>';
+
+    try {
+      const res = await fetch(SCHEDULE_API);
+      const data = await res.json();
+      const events = data.events || [];
+      if (!events.length) {
+        body.innerHTML = '<div class="schedule-loading">لا توجد مباريات</div>';
+        scheduleLoaded = true;
+        return;
+      }
+      let html = '';
+      events.forEach(ev => html += renderMatchCard(ev));
+      body.innerHTML = html;
+      scheduleLoaded = true;
+    } catch (err) {
+      body.innerHTML = `<div class="schedule-error">تعذّر التحميل</div>`;
+    }
+  }
+
+  function renderMatchCard(ev) {
+    const comp = ev.competitions && ev.competitions[0];
+    if (!comp) return '';
+    const competitors = comp.competitors || [];
+    const home = competitors.find(c => c.homeAway === 'home') || competitors[0];
+    const away = competitors.find(c => c.homeAway === 'away') || competitors[1];
+    if (!home || !away) return '';
+
+    const homeName = getArabicTeamName(home.team?.displayName);
+    const awayName = getArabicTeamName(away.team?.displayName);
+    const defaultLogo = 'https://a.espncdn.com/i/teamlogos/soccer/500/default-team-logo-500.png';
+    const homeLogo = home.team?.logo || defaultLogo;
+    const awayLogo = away.team?.logo || defaultLogo;
+
+    const state = ev.status?.type?.state || 'pre';
+    let statusClass = 'scheduled', statusText = 'لم تبدأ';
+    if (state === 'in') { statusClass = 'live'; statusText = 'مباشر'; }
+    else if (state === 'post') { statusClass = 'final'; statusText = 'انتهت'; }
+
+    let scoreDisplay = '';
+    if (state === 'pre') {
+      const matchDate = new Date(ev.date);
+      const timeString = matchDate.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+      const dateString = matchDate.toLocaleDateString('ar-EG', { weekday: 'long', month: 'long', day: 'numeric' }).replace('،', '');
+      scoreDisplay = `<div class="score-side"><div class="match-time-display">${timeString}</div><div class="match-date-display">${dateString}</div></div>`;
+    } else {
+      scoreDisplay = `<div class="score-side"><div class="score-numbers"><span class="score-num ${home.winner ? 'winner' : ''}">${home.score || '-'}</span><span class="score-divider">:</span><span class="score-num ${away.winner ? 'winner' : ''}">${away.score || '-'}</span></div></div>`;
+    }
+
+    return `
+      <div class="match-card">
+        <div class="match-top"><span class="match-status-badge ${statusClass}">${statusText}</span></div>
+        <div class="match-content">
+          <div class="team-side"><img class="team-logo" src="${escapeHtml(homeLogo)}" onerror="this.src='${defaultLogo}'"><div class="team-name">${escapeHtml(homeName)}</div></div>
+          ${scoreDisplay}
+          <div class="team-side"><img class="team-logo" src="${escapeHtml(awayLogo)}" onerror="this.src='${defaultLogo}'"><div class="team-name">${escapeHtml(awayName)}</div></div>
+        </div>
+      </div>`;
+  }
+
+  /* ==========================================================
+     NEWS LOGIC
+     ========================================================== */
+  function openNews() {
+    document.getElementById('newsView').classList.add('active');
+    if (!newsLoaded) loadNews();
+  }
+
+  function closeNews() {
+    document.getElementById('newsView').classList.remove('active');
+  }
+
+  async function loadNews() {
+    const body = document.getElementById('newsBody');
+    body.innerHTML = '<div class="news-loading">⏳ جاري تحميل وترجمة الأخبار...</div>';
+
+    try {
+      const res = await fetch(NEWS_API);
+      const data = await res.json();
+      const articles = data.articles || [];
+      if (!articles.length) {
+        body.innerHTML = '<div class="news-loading">لا توجد أخبار</div>';
+        newsLoaded = true;
+        return;
+      }
+
+      const translationPromises = articles.map(async (article) => {
+        const translatedTitle = await translateText(article.headline || '');
+        const translatedDesc = await translateText(article.description || '');
+        return renderNewsCard(article, translatedTitle, translatedDesc);
+      });
+      const cardsHtml = await Promise.all(translationPromises);
+      body.innerHTML = cardsHtml.join('');
+      newsLoaded = true;
+    } catch (err) {
+      body.innerHTML = `<div class="news-error">تعذّر تحميل الأخبار</div>`;
+    }
+  }
+
+  function renderNewsCard(article, translatedTitle, translatedDesc) {
+    const image = article.images && article.images[0] ? article.images[0].url : '';
+    const source = "نجم الشاشات";
+    const pubDate = article.published ? new Date(article.published) : null;
+    let dateString = pubDate ? pubDate.toLocaleDateString('ar-EG', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+
+    return `
+      <div class="news-card">
+        ${image ? `<img class="news-image" src="${escapeHtml(image)}" onerror="this.style.display='none'">` : ''}
+        <div class="news-content">
+          <div class="news-title">${escapeHtml(translatedTitle)}</div>
+          ${translatedDesc ? `<div class="news-desc">${escapeHtml(translatedDesc)}</div>` : ''}
+          <div class="news-meta"><span class="news-source">${escapeHtml(source)}</span><span>${dateString}</span></div>
+        </div>
+      </div>`;
+  }
+
+  /* ==========================================================
+     VOD (MOVIES & SERIES) LOGIC - INFINITE SCROLL
+     ========================================================== */
+  function openVOD() {
+    document.getElementById('vodView').classList.add('active');
+    if (!vodLoaded) loadVOD();
+  }
+
+  function closeVOD() {
+    document.getElementById('vodView').classList.remove('active');
+  }
+
+  async function loadVOD() {
+    const body = document.getElementById('vodBody');
+    body.innerHTML = '<div class="news-loading">⏳ جاري تحميل الأفلام والمسلسلات...</div>';
+
+    try {
+      const base = `${VOD_CONFIG.host}/player_api.php?username=${encodeURIComponent(VOD_CONFIG.username)}&password=${encodeURIComponent(VOD_CONFIG.password)}`;
+      
+      const moviesPromise = fetchWithTimeout(`${base}&action=get_vod_streams`, { timeout: 20000 }).then(r => r.json()).catch(() => []);
+      const seriesPromise = fetchWithTimeout(`${base}&action=get_series`, { timeout: 20000 }).then(r => r.json()).catch(() => []);
+
+      const [movies, series] = await Promise.all([moviesPromise, seriesPromise]);
+
+      let allVOD = [];
+      
+      if (Array.isArray(movies)) {
+        movies.forEach(m => {
+          allVOD.push({ ...m, type: 'movie', stream_id: m.stream_id, container_extension: m.container_extension || 'mp4' });
+        });
+      }
+      
+      if (Array.isArray(series)) {
+        series.forEach(s => {
+          allVOD.push({ ...s, type: 'series', stream_icon: s.cover || s.stream_icon || '', stream_id: s.series_id });
+        });
+      }
+
+      // قص القائمة إلى 700 عنصر كحد أقصى
+      vodData = allVOD.slice(0, VOD_CONFIG.maxItems);
+      vodRenderedCount = 0;
+
+      if (!vodData.length) {
+        body.innerHTML = '<div class="news-loading">لا توجد أفلام أو مسلسلات متاحة</div>';
+        vodLoaded = true;
+        return;
+      }
+
+      // تجهيز واجهة المستخدم
+      body.innerHTML = `
+        <div class="vod-grid" id="vodGrid"></div>
+        <div class="vod-sentinel" id="vodSentinel">جاري تحميل المزيد...</div>
+      `;
+
+      // عرض أول 10 عناصر فوراً
+      renderVODBatch(true);
+      setupVODObserver();
+      vodLoaded = true;
+
+    } catch (err) {
+      console.error(err);
+      body.innerHTML = `<div class="news-error">تعذّر تحميل الأفلام والمسلسلات<br><small style="opacity:.7">${escapeHtml(err.message)}</small></div>`;
+    }
+  }
+
+  function renderVODBatch(isFirst = false) {
+    const grid = document.getElementById('vodGrid');
+    const sentinel = document.getElementById('vodSentinel');
+    if (!grid) return;
+
+    // إذا كانت هذه المرة الأولى، نعرض 10 عناصر فقط، وإلا نعرض 15
+    const limit = isFirst ? 10 : VOD_BATCH_SIZE;
+    const chunk = vodData.slice(vodRenderedCount, vodRenderedCount + limit);
+    
+    if (chunk.length === 0) {
+      if (sentinel) sentinel.style.display = 'none';
+      return;
+    }
+
+    let html = '';
+    chunk.forEach(item => {
+      const title = item.name || 'بدون اسم';
+      const image = item.stream_icon || '';
+      const badge = item.type === 'movie' ? 'فيلم' : 'مسلسل';
+      const safeTitle = title.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+      
+      html += `
+        <div class="vod-item" onclick="playVODItem(${item.stream_id}, '${item.type}', '${item.container_extension || 'mp4'}', '${safeTitle}')">
+          ${image ? `<img class="vod-image" src="${escapeHtml(image)}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` : ''}
+          <div class="vod-image-placeholder" style="${image ? 'display:none;' : 'display:flex;'}">🎬</div>
+          <div class="vod-badge">${badge}</div>
+          <div class="vod-title">${escapeHtml(title)}</div>
+        </div>
+      `;
+    });
+
+    grid.insertAdjacentHTML('beforeend', html);
+    vodRenderedCount += chunk.length;
+
+    if (vodRenderedCount >= vodData.length && sentinel) {
+      sentinel.style.display = 'none';
+    }
+  }
+
+  function setupVODObserver() {
+    const sentinel = document.getElementById('vodSentinel');
+    const body = document.getElementById('vodBody');
+    if (!sentinel || !body) return;
+    
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        observer.disconnect(); // إيقاف المراقبة مؤقتاً لمنع التكرار
+        renderVODBatch(false);
+        if (vodRenderedCount < vodData.length) {
+          setTimeout(() => observer.observe(sentinel), 100); // إعادة المراقبة بعد التحميل
+        }
+      }
+    }, { root: body, rootMargin: '200px' });
+    
+    observer.observe(sentinel);
+  }
+
+  async function playVODItem(id, type, ext, title) {
+    const modal = document.getElementById('vodPlayerModal');
+    const player = document.getElementById('vodPlayer');
+    const titleEl = document.getElementById('vodPlayerTitle');
+
+    titleEl.textContent = title;
+    modal.classList.add('active');
+
+    if (vodHls) { try { vodHls.destroy(); } catch(e){} vodHls = null; }
+    try { player.pause(); } catch(e){}
+    player.removeAttribute('src');
+    player.load();
+
+    const base = `${VOD_CONFIG.host}/player_api.php?username=${encodeURIComponent(VOD_CONFIG.username)}&password=${encodeURIComponent(VOD_CONFIG.password)}`;
+    let url = '';
+
+    if (type === 'movie') {
+      url = `${VOD_CONFIG.host}/movie/${encodeURIComponent(VOD_CONFIG.username)}/${encodeURIComponent(VOD_CONFIG.password)}/${id}.${ext}`;
+      playStream(url, ext);
+    } else if (type === 'series') {
+      titleEl.textContent = title + ' (جاري جلب الحلقات...)';
+      try {
+        const infoRes = await fetchWithTimeout(`${base}&action=get_series_info&series_id=${id}`, { timeout: 15000 });
+        const info = await infoRes.json();
+        
+        if (info && info.episodes) {
+          const seasons = Object.keys(info.episodes);
+          if (seasons.length > 0) {
+            const firstSeason = seasons[0];
+            const firstEpisode = info.episodes[firstSeason][0];
+            const epExt = firstEpisode.container_extension || 'mkv';
+            url = `${VOD_CONFIG.host}/series/${encodeURIComponent(VOD_CONFIG.username)}/${encodeURIComponent(VOD_CONFIG.password)}/${firstEpisode.id}.${epExt}`;
+            titleEl.textContent = title + ' - م' + firstSeason + ' ح1';
+            playStream(url, epExt);
+          } else {
+            titleEl.textContent = 'لا توجد حلقات متاحة';
+          }
+        } else {
+          titleEl.textContent = 'خطأ في جلب الحلقات';
+        }
+      } catch (e) {
+        titleEl.textContent = 'خطأ في الاتصال';
+      }
+    }
+  }
+
+  function playStream(url, ext) {
+    const player = document.getElementById('vodPlayer');
+    if (url.includes('.m3u8') || ext === 'm3u8') {
+      if (window.Hls && Hls.isSupported()) {
+        vodHls = new Hls();
+        vodHls.loadSource(url);
+        vodHls.attachMedia(player);
+        vodHls.on(Hls.Events.MANIFEST_PARSED, () => player.play().catch(() => {}));
+      } else {
+        player.src = url;
+        player.play().catch(() => {});
+      }
+    } else {
+      player.src = url;
+      player.play().catch(() => {});
+    }
+  }
+
+  function closeVODPlayer() {
+    const modal = document.getElementById('vodPlayerModal');
+    const player = document.getElementById('vodPlayer');
+    
+    modal.classList.remove('active');
+    try { player.pause(); } catch(e){}
+    if (vodHls) { try { vodHls.destroy(); } catch(e){} vodHls = null; }
+    player.removeAttribute('src');
+    player.load();
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+</script>
+
+</body>
+</html>
