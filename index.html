@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>القائمة الرئيسية</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -12,6 +12,14 @@
     box-sizing: border-box;
     font-family: 'Tajawal', sans-serif;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ==========================================
+     دعم المساحات الآمنة (Safe Area) للشاشات
+     ========================================== */
+  :root {
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
   }
 
   html, body {
@@ -47,17 +55,19 @@
     background: radial-gradient(ellipse at 50% 40%, rgba(100, 50, 180, 0.15) 0%, transparent 60%);
   }
 
+  /* القائمة الرئيسية مع دعم الآيفون/الأندرويد */
   .container {
     position: relative;
     z-index: 1;
     width: 100%;
     max-width: 420px;
     height: 100vh;
+    height: 100dvh; /* الوضع الصحيح للشاشات الحديثة */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 15px;
+    padding: calc(15px + var(--sat)) 15px calc(15px + var(--sab)) 15px;
   }
 
   .grid {
@@ -151,6 +161,8 @@
     background: #0a0618;
     display: none;
     flex-direction: column;
+    padding-top: var(--sat);
+    padding-bottom: var(--sab);
   }
 
   .channels-view.active {
@@ -348,6 +360,8 @@
     background: #0a0618;
     display: none;
     flex-direction: column;
+    padding-top: var(--sat);
+    padding-bottom: var(--sab);
   }
 
   .schedule-view.active {
@@ -566,6 +580,8 @@
     background: #0a0618;
     display: none;
     flex-direction: column;
+    padding-top: var(--sat);
+    padding-bottom: var(--sab);
   }
 
   .news-view.active {
@@ -693,6 +709,8 @@
     background: #0a0618;
     display: none;
     flex-direction: column;
+    padding-top: var(--sat);
+    padding-bottom: var(--sab);
   }
 
   .vod-view.active { display: flex; }
@@ -894,6 +912,8 @@
     background: #0a0618;
     display: none;
     flex-direction: column;
+    padding-top: var(--sat);
+    padding-bottom: var(--sab);
   }
 
   .episodes-view.active { display: flex; }
@@ -1010,6 +1030,8 @@
     background: #000;
     display: none;
     flex-direction: column;
+    padding-top: var(--sat);
+    padding-bottom: var(--sab);
   }
 
   .vod-player-view.active { display: flex; }
@@ -1897,7 +1919,6 @@
         .slice(0, 100);
       localStorage.setItem(SERIES_INFO_CACHE_KEY, JSON.stringify(Object.fromEntries(entries)));
     } catch (e) {
-      // تجاوز الحصة → قلل العدد
       try {
         const entries = Object.entries(seriesInfoCache)
           .filter(([k, v]) => v && v.episodes)
@@ -1910,22 +1931,18 @@
     }
   }
 
-  /* جلب معلومات مسلسل واحد (مع كاش ذكي) */
   async function fetchSeriesInfo(seriesId) {
     seriesId = String(seriesId);
 
-    // 1) من الذاكرة
     const cached = seriesInfoCache[seriesId];
     if (cached && cached.episodes && (Date.now() - (cached.t || 0)) < SERIES_INFO_TTL) {
       return cached;
     }
 
-    // 2) طلب جارٍ بالفعل؟ انتظره
     if (seriesInfoLoading[seriesId]) {
       return seriesInfoLoading[seriesId];
     }
 
-    // 3) جلب جديد
     const promise = (async () => {
       try {
         const url = `${VOD_CONFIG.host}/player_api.php?username=${encodeURIComponent(VOD_CONFIG.username)}&password=${encodeURIComponent(VOD_CONFIG.password)}&action=get_series_info&series_id=${seriesId}`;
@@ -1944,14 +1961,13 @@
     return promise;
   }
 
-  /* تحميل مسبق لأول 60 مسلسل في الخلفية */
   async function preloadTopSeries() {
     if (seriesPreloadStarted) return;
     if (!vodSeries.length) return;
     seriesPreloadStarted = true;
 
-    const CONCURRENCY = 5;   // طلبات متوازية بلطف على السيرفر
-    const MAX_PRELOAD = 60;  // أول 60 مسلسل (تغطي معظم الضغطات)
+    const CONCURRENCY = 5;
+    const MAX_PRELOAD = 60;
 
     const queue = [];
     for (let i = 0; i < Math.min(MAX_PRELOAD, vodSeries.length); i++) {
@@ -1971,7 +1987,7 @@
         try {
           await fetchSeriesInfo(sid);
         } catch (e) {
-          // تجاهل - سنعيد المحاولة لو ضغط المستخدم
+          // تجاهل
         }
       }
     }
@@ -1988,7 +2004,6 @@
     vodLoading = true;
     const grid = document.getElementById('vodGrid');
 
-    // 1) جرّب الكاش أولاً (فوري)
     const cached = readVodCache();
     if (cached && ((cached.movies && cached.movies.length) || (cached.series && cached.series.length))) {
       vodMovies = cached.movies || [];
@@ -1999,7 +2014,6 @@
       return;
     }
 
-    // 2) تحميل من السيرفر
     grid.innerHTML = '<div class="vod-loading">⏳ جاري تحميل الأفلام والمسلسلات...</div>';
 
     const base = `${VOD_CONFIG.host}/player_api.php?username=${encodeURIComponent(VOD_CONFIG.username)}&password=${encodeURIComponent(VOD_CONFIG.password)}`;
@@ -2076,7 +2090,6 @@
     vodItems = combined.slice(0, VOD_CONFIG.maxItems);
     renderVodGrid();
 
-    /* 🚀 بدء التحميل المسبق للحلقات في الخلفية */
     setTimeout(() => {
       preloadTopSeries().catch(e => console.warn('preload error', e));
     }, 300);
@@ -2190,9 +2203,6 @@
     openVodPlayer(url, item.title, 'فيلم • ' + (item.rating ? '★ ' + item.rating : ''));
   }
 
-  /* ==========================================================
-     عرض الحلقات - فوري من الكاش
-     ========================================================== */
   async function openSeriesDetail(item) {
     const seriesId = String(item.id);
     currentEpisodesSeriesName = item.title;
@@ -2200,16 +2210,13 @@
     document.getElementById('episodesView').classList.add('active');
     const body = document.getElementById('episodesBody');
 
-    // ⚡ محاولة فورية من الكاش (0 ثانية)
     const cached = seriesInfoCache[seriesId];
     if (cached && cached.episodes && Object.keys(cached.episodes).length) {
       renderEpisodesToBody(cached.episodes, body);
       return;
     }
 
-    // ⚡ موجود في التحميل المسبق؟ انتظره لحظات
     if (seriesInfoLoading[seriesId]) {
-      // عرض مؤقت سريع جداً
       body.innerHTML = '<div class="vod-loading" style="padding:20px">⏳</div>';
       try {
         const info = await seriesInfoLoading[seriesId];
@@ -2220,7 +2227,6 @@
       }
     }
 
-    // ❌ غير موجود → جلب سريع
     body.innerHTML = '<div class="vod-loading" style="padding:20px">⏳</div>';
     try {
       const info = await fetchSeriesInfo(seriesId);
@@ -2284,7 +2290,6 @@
     openVodPlayer(url, currentEpisodesSeriesName, epLabel);
   }
 
-  /* مشغل الأفلام والمسلسلات */
   function openVodPlayer(url, title, sub) {
     const view = document.getElementById('vodPlayerView');
     const player = document.getElementById('vodPlayer');
